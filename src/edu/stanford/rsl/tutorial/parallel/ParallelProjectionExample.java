@@ -23,8 +23,8 @@ public class ParallelProjectionExample {
 		int y = 200;
 		// Create a phantom
 		Phantom phan = new DotsGrid2D(x, y);
-		phan = new UniformCircleGrid2D(x, y);
-		phan = new MickeyMouseGrid2D(x, y, 3);
+		//phan = new UniformCircleGrid2D(x, y);
+		//phan = new MickeyMouseGrid2D(x, y, 3);
 		phan.show("The Phantom");
 		
 		// Project forward parallel

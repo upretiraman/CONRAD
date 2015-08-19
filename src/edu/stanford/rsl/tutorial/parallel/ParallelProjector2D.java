@@ -262,7 +262,7 @@ public class ParallelProjector2D {
 			SimpleVector dirDetector = new SimpleVector(cosTheta, sinTheta);
 
 			// loop over all grid points
-			// x,y are in the grid coordinate system
+			// x,y are in the grid coordinate sys
 			// wx,wy are in the world coordinate system
 			for (int x = 0; x < grid.getSize()[0]; x++) {
 				for (int y = 0; y < grid.getSize()[1]; y++) {
