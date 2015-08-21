@@ -1,14 +1,12 @@
 package FlatPanelCTRecon;
 
 import edu.stanford.rsl.apps.gui.ReconstructionPipelineFrame;
-import edu.stanford.rsl.conrad.data.numeric.Grid2D;
 import edu.stanford.rsl.conrad.data.numeric.Grid3D;
 import edu.stanford.rsl.conrad.filtering.CosineWeightingTool;
 import edu.stanford.rsl.conrad.filtering.ImageFilteringTool;
 import edu.stanford.rsl.conrad.filtering.RampFilteringTool;
 import edu.stanford.rsl.conrad.filtering.rampfilters.HanningRampFilter;
 import edu.stanford.rsl.conrad.filtering.rampfilters.RampFilter;
-import edu.stanford.rsl.conrad.filtering.redundancy.ParkerWeightingTool;
 import edu.stanford.rsl.conrad.opencl.OpenCLBackProjector;
 import edu.stanford.rsl.conrad.utils.CONRAD;
 import edu.stanford.rsl.conrad.utils.ImageUtil;
@@ -33,8 +31,8 @@ public class myShortScanUsingCONRAD
 	    //Exercise 5.2 -> Projection Matrices and CONRAD GUI
 	    //This configure the GUI calling the global configuration file.
 	    CONRAD.setup();
-        //ReconstructionPipelineFrame pipeLine = new ReconstructionPipelineFrame();
-        //pipeLine.setVisible(true);
+        ReconstructionPipelineFrame pipeLine = new ReconstructionPipelineFrame();
+        pipeLine.setVisible(true);
         
         //Exercise 5.3 -> Parker Weights
         /*arkerWeightingTool parkerWeight = new ParkerWeightingTool();

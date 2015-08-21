@@ -237,12 +237,12 @@ public class testOpenCL {
 		OpenCLGrid2D addPhanCL = new OpenCLGrid2D(p, context, device);
 		o.AddPhantomToCPUandGPU(p, phantomCL, addPhanCL);
 		
-		/*// Exercise Sheet 4 - 2.		
+		// Exercise Sheet 4 - 2.		
 		OpenCLGrid2D grid1 = createGrid1(size, context, device);
 		OpenCLGrid2D grid2 = createGrid2(size, context, device);
 		o.AddTwoOpenCLGrid2Ds(grid1, grid2, context, device, size);
 		
-		// Exercise Sheet 4 - 3.
+		/*// Exercise Sheet 4 - 3.
 		
 		// for creating a sinogram from class PhantomK
 		p.setSpacing(0.1, 0.1);
