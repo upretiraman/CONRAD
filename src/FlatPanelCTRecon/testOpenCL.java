@@ -170,8 +170,7 @@ public class testOpenCL {
 	{
 		CLProgram program = null;
 		try {
-			program = context.createProgram(this.getClass().getResourceAsStream("OpenCL_BP.cl"))
-					.build();
+			program = context.createProgram(this.getClass().getResourceAsStream("OpenCLBackProjection.cl")).build();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);
@@ -194,7 +193,7 @@ public class testOpenCL {
 		sinoBuffer.getBuffer().rewind();
 		
 		// copy params
-		CLKernel kernel = program.createCLKernel("OpenCL_BP");
+		CLKernel kernel = program.createCLKernel("OpenCLBackProjection");
 		kernel.putArg(resultBPGrid).putArg(sinoBuffer)
 			.putArg(numberProj).putArg(detectorSpacing).putArg(numberDetPixel).putArg(sizeRecon).putArg(pixelSpacingRecon[0]).putArg(pixelSpacingRecon[1])
 			.putArg((float)sino.getOrigin()[0]).putArg((float)sino.getOrigin()[1]);
@@ -231,25 +230,27 @@ public class testOpenCL {
 		CLDevice device = context.getMaxFlopsDevice();
 		
 		// Exercise Sheet 4 - 1.		
-		int size = 256;
+		int size = 200;
 		myphantom p = new myphantom(200,200);
-		OpenCLGrid2D phantomCL = new OpenCLGrid2D(p, context, device);
+		/*OpenCLGrid2D phantomCL = new OpenCLGrid2D(p, context, device);
 		OpenCLGrid2D addPhanCL = new OpenCLGrid2D(p, context, device);
 		o.AddPhantomToCPUandGPU(p, phantomCL, addPhanCL);
 		
 		// Exercise Sheet 4 - 2.		
 		OpenCLGrid2D grid1 = createGrid1(size, context, device);
 		OpenCLGrid2D grid2 = createGrid2(size, context, device);
-		o.AddTwoOpenCLGrid2Ds(grid1, grid2, context, device, size);
+		o.AddTwoOpenCLGrid2Ds(grid1, grid2, context, device, size);*/
 		
-		/*// Exercise Sheet 4 - 3.
+		// Exercise Sheet 4 - 3.
 		
 		// for creating a sinogram from class PhantomK
 		p.setSpacing(0.1, 0.1);
 		p.setOrigin(-(size - 1) * p.getSpacing()[0] / 2, -(size - 1) * p.getSpacing()[1]/ 2);
 		float d = (float) (Math.sqrt(2) * p.getHeight() * p.getSpacing()[0]);
 		float detectorSpacing = (float) 0.1;
-		Grid2D sinogram = p.createSinogram(360, detectorSpacing, (int)((int)d/detectorSpacing), d/2 );
+		//Grid2D sinogram = p.createSinogram(360, detectorSpacing, (int)((int)d/detectorSpacing), d/2 );
+		 myParallelProject projector = new myParallelProject(300,1,400);
+ 		Grid2D sinogram = projector.projectRayDriven(p);
 		sinogram.setSpacing(360/sinogram.getSize()[0], detectorSpacing);
 		sinogram.setOrigin(-(sinogram.getSize()[0]-1)*sinogram.getSpacing()[0]/2, -(sinogram.getSize()[1]-1)*sinogram.getSpacing()[1]/2 );
 		float [] pixelSpacingRecon = {(float) 0.2, (float) 0.2};
@@ -280,7 +281,7 @@ public class testOpenCL {
 	
 		long endtime= System.nanoTime();
 		
-		System.out.println("Time on GPU for PBP " + (endtime - starttime));		*/
+		System.out.println("Time on GPU for PBP " + (endtime - starttime));		
 		
 
 	}
