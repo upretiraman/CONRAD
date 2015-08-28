@@ -244,7 +244,7 @@ public class testOpenCL {
 		// Exercise Sheet 4 - 3.
 		
 		// for creating a sinogram from class PhantomK
-		p.setSpacing(0.1, 0.1);
+		//p.setSpacing(0.1, 0.1);
 		p.setOrigin(-(size - 1) * p.getSpacing()[0] / 2, -(size - 1) * p.getSpacing()[1]/ 2);
 		float d = (float) (Math.sqrt(2) * p.getHeight() * p.getSpacing()[0]);
 		float detectorSpacing = (float) 0.1;
