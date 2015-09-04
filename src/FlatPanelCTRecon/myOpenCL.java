@@ -71,7 +71,7 @@ public class myOpenCL {
 		// creating openCL sinogram
 		OpenCLGrid2D sinogramCL = new OpenCLGrid2D(sinogram, openCLObj.clContext, openCLObj.clDevice);
 		
-		CONRAD.setup();
+		//CONRAD.setup();
 		
 		//Setting up Ramp Filter
 		RampFilteringTool rampFilterTool = new RampFilteringTool();
@@ -92,7 +92,7 @@ public class myOpenCL {
 		filteredSino.show("filtered sinogram");
 		
 		long starttime= System.nanoTime();
-		
+		double sinogramSpacing = sinogram.getSpacing()[1];
 		openCLObj.openCLBackProjection( sinogramCL, 
 										openCLObj.clContext, 
 										openCLObj.clDevice, 
@@ -100,7 +100,8 @@ public class myOpenCL {
 										detectorSpacing, 
 										numberDetPixel, 
 										size, 
-										pixelSpacingRecon);
+										pixelSpacingRecon,
+										sinogramSpacing);
 		
 		long endtime= System.nanoTime();
 		
@@ -262,12 +263,14 @@ public class myOpenCL {
 									   float 		detectorSpacing, 
 									   int 			numberDetPixel, 
 									   int 			sizeRecon, 
-									   float 		pixelSpacingRecon[]) 
+									   float 		pixelSpacingRecon[],
+									   double sinoSpacing) 
 	{
 		CLProgram program = null;
 		try 
 		{
-			program = context.createProgram(this.getClass().getResourceAsStream("OpenCLBackProjection.cl")).build();
+			//program = context.createProgram(this.getClass().getResourceAsStream("TrialOpenCLBackProjection.cl")).build();
+			program = context.createProgram(this.getClass().getResourceAsStream("TrialOpenCLBackProjection.cl")).build();
 		} 
 		catch (IOException e) 
 		{
@@ -294,7 +297,8 @@ public class myOpenCL {
 		
 		
 		// copy parameters
-		CLKernel kernel = program.createCLKernel("OpenCLBackProjection");
+		//CLKernel kernel = program.createCLKernel("TrialOpenCLBackProjection");
+		CLKernel kernel = program.createCLKernel("TrialOpenCLBackProjection");
 		  kernel.putArg(resultBPGrid)
 				.putArg(sinoBuffer)
 				.putArg(numberProj)
@@ -304,7 +308,8 @@ public class myOpenCL {
 				.putArg(pixelSpacingRecon[0])
 				.putArg(pixelSpacingRecon[1])
 				.putArg((float)sino.getOrigin()[0])
-				.putArg((float)sino.getOrigin()[1]);
+				.putArg((float)sino.getOrigin()[1])
+				.putArg(sinoSpacing);
 	
 		// createCommandQueue
 		CLCommandQueue queue = device.createCommandQueue();
