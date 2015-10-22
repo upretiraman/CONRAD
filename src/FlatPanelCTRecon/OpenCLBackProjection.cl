@@ -21,36 +21,37 @@ kernel void OpenCLBackProjection(
 	__global float* backProjectionPic,
 	__global float* sinogram,
 	int numberProj,
-	float detectorSpacing,
+	double detectorSpacing,
 	int numberDetPixel,
-	int sizeReconPic,
-	float pixelSpacingReconX,
-	float pixelSpacingReconY,
+	int sizeReconPicX,
+	int sizeReconPicY,
+	double pixelSpacingReconX,
+	double pixelSpacingReconY,
 	float originX,
 	float originY) 
 {
-	const unsigned int x = get_global_id(0);// x index
-	const unsigned int y = get_global_id(1);// y index
-	const unsigned int idx = x*sizeReconPic + y;
+	const unsigned int i = get_global_id(0);// x index
+	const unsigned int j = get_global_id(1);// y index
+	const unsigned int idx = i*sizeReconPicY + j;
 	
 	int locSizex = get_local_size(0);
 	int locSizey = get_local_size(1);
 	
 	//check if inside image boundaries
-	if ( x > sizeReconPic || y > sizeReconPic)
+	if ( i > sizeReconPicX || j > sizeReconPicY)
 		return;
 		
 	//Set Origin from backProjection
-	float backProjOriginX = -(sizeReconPic-1)*pixelSpacingReconX/2;
-	float backProjOriginY = -(sizeReconPic-1)*pixelSpacingReconY/2;
+	float backProjOriginX = -(sizeReconPicX-1)*pixelSpacingReconX/2;
+	float backProjOriginY = -(sizeReconPicY-1)*pixelSpacingReconY/2;
 
 	float pval = 0.f;
 	for (int theta = 0; theta < numberProj; theta++)
 	{
 		float alpha =  ((2.f*M_PI_F/(numberProj))*theta);
-		float indexX = x*pixelSpacingReconX + backProjOriginX;
-		float indexY = y*pixelSpacingReconY + backProjOriginY;
-		float s = indexX*cos(alpha) + indexY*sin(alpha);
+		float X = i*pixelSpacingReconX + backProjOriginX;
+		float Y = j*pixelSpacingReconY + backProjOriginY;
+		float s = X*cos(alpha) + Y*sin(alpha);
 		s = (s - originY)/detectorSpacing;
 		
 		//interpolate
@@ -60,8 +61,8 @@ kernel void OpenCLBackProjection(
 		float valR1 = sinogram[theta*numberProj+y1];
 		float valR2 = sinogram[theta*numberProj+y2];
 		float value = ((y2-y)/(y2-y1))*valR1 + ((y-y1)/(y2-y1))*valR2;
-		
-		value = M_PI_F*value/numberProj;
+		//float aux = M_PI_F*value/numberProj;
+		//value = M_PI_F*value/numberProj;
 
 		pval += value;
 	}
