@@ -194,8 +194,17 @@ public class testOpenCL {
 		
 		// copy params
 		CLKernel kernel = program.createCLKernel("OpenCLBackProjection");
-		kernel.putArg(resultBPGrid).putArg(sinoBuffer)
-			.putArg(numberProj).putArg(detectorSpacing).putArg(numberDetPixel).putArg(sizeRecon[0]).putArg(sizeRecon[1]).putArg(pixelSpacingRecon[0]).putArg(pixelSpacingRecon[1])			.putArg((float)sino.getOrigin()[0]).putArg((float)sino.getOrigin()[1]);
+		kernel.putArg(resultBPGrid)
+		.putArg(sinoBuffer)
+		.putArg(numberProj)
+		.putArg(detectorSpacing)
+		.putArg(numberDetPixel)
+		.putArg(sizeRecon[0])
+		.putArg(sizeRecon[1])
+		.putArg(pixelSpacingRecon[0])
+		.putArg(pixelSpacingRecon[1])		
+		.putArg((float)sino.getOrigin()[0])
+		.putArg((float)sino.getOrigin()[1]);
 	
 		// createCommandQueue
 		CLCommandQueue queue = device.createCommandQueue();
