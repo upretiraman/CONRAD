@@ -32,7 +32,8 @@ kernel void OpenCLBackProjection(
 {
 	const unsigned int i = get_global_id(0);// x index
 	const unsigned int j = get_global_id(1);// y index
-	const unsigned int idx = j*sizeReconPicX + i;
+	const unsigned int idx = j*sizeReconPicX + i; //Linear index for the phantom
+	const double detectorLength = detectorSpacing*numberDetPixel;
 	
 	int locSizex = get_local_size(0);
 	int locSizey = get_local_size(1);
@@ -40,21 +41,17 @@ kernel void OpenCLBackProjection(
 	//check if inside image boundaries
 	if ( i > sizeReconPicX || j > sizeReconPicY)
 		return;
-		
-	//Set Origin from backProjection
-	float backProjOriginX = -(sizeReconPicX-1)*pixelSpacingReconX/2;
-	float backProjOriginY = -(sizeReconPicY-1)*pixelSpacingReconY/2;
-	double x = i*detectorSpacing -((sizeReconPicX * pixelSpacingReconX) / 2);
-	double y = -j*detectorSpacing +((sizeReconPicY * pixelSpacingReconY) / 2);
-	double detIndexMF = 0.0;
-	double s = 0.0;
+	double x = i*detectorSpacing -((sizeReconPicX * pixelSpacingReconX) / 2.0);
+	double y = j*detectorSpacing -((sizeReconPicY * pixelSpacingReconY) / 2.0);
+	double detIndexMF = 0.0;	
 	double pval = 0.f;
-	for (int theta = 0; theta < numberProj; theta++)
-	{
-		float alpha =  ((M_PI_F/(numberProj))*theta);
-		if(alpha == 0 || alpha == (M_PI_F/2.0) || alpha == M_PI_F)
+	for (int a = 0; a < numberProj; a++)
+	{		
+		float theta =  ((M_PI_F/(numberProj))*a);
+		float s;
+		if(theta == 0 || theta == (M_PI_F/2.0) || theta == M_PI_F)
         {
-            if(alpha == M_PI_F/2.0)
+            if(theta == M_PI_F/2.0)
                 s = y;
             else
             {
@@ -63,38 +60,31 @@ kernel void OpenCLBackProjection(
         }
         else
         {
-			double x_det = cos(alpha); //i*pixelSpacingReconX + backProjOriginX;
-			double y_det = sin(alpha); //j*pixelSpacingReconY + backProjOriginY;
-			double detSlope = tan(alpha);
-			double projSlope = tan(alpha + (M_PI_F/2.f));
+			double x_det = cos(theta); //i*pixelSpacingReconX + backProjOriginX;
+			double y_det = sin(theta); //j*pixelSpacingReconY + backProjOriginY;
+			double detSlope = tan(theta);
+			double projSlope = tan(theta + (M_PI_F/2.f));
 			double yIntercept = y - x*projSlope;
 			double dtX = yIntercept/(detSlope-projSlope);
-			double dtY = detSlope*dtX;
-			double detDir = sqrt((x_det*x_det)+(y_det*y_det));
+			double dtY = detSlope*dtX;			
 			double magn_dPX = sqrt((dtX*dtX)+(dtY*dtY));
 			double cosAlpha = 0;
-			if(magn_dPX == 0 || detDir == 0) 
+			if(magn_dPX == 0) 
 			{
 				cosAlpha = 0;
 				s = 0;
-			} 
+			}
 			else
 			{ 
-				cosAlpha = (dtX*x_det + dtY*y_det)/(magn_dPX * detDir);
-				if(cosAlpha < 0){s= -magn_dPX;}
-				else{s= magn_dPX;}
-			}			
-			//float s = x_det*cos(alpha) + y_det*sin(alpha);		
-			//s = (s - originY)/detectorSpacing;
+				cosAlpha = (dtX*x_det + dtY*y_det)/(magn_dPX);
+			}
+			if(cosAlpha < 0){s= -magn_dPX;}
+			else{s= magn_dPX;}
 		}
-		
 		//interpolating
-		detIndexMF = (s + ((detectorSpacing*numberDetPixel)+1)/2)/detectorSpacing; //Index in the x direction.
-		int low = floor(detIndexMF);
-		int high = ceil(detIndexMF);
-		double vallow = sinogram[theta*numberDetPixel + low];
-		double valhigh = sinogram[theta*numberDetPixel + high];
-		double valSin = vallow*(high-detIndexMF) + valhigh*(detIndexMF-low); 		
+		detIndexMF = (s + (detectorLength/2))/detectorSpacing; //Index in the x direction.
+		double valSin = 0;
+		valSin = sinogram[a*numberDetPixel + (int)detIndexMF];
 		pval += valSin;
 	}
 	

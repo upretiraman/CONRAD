@@ -237,7 +237,7 @@ public class testOpenCL {
 		new ImageJ();
 		testOpenCL o = new testOpenCL();
 		CLContext context = OpenCLUtil.createContext();
-		CLDevice[] devices = context.getDevices();
+		//CLDevice[] devices = context.getDevices();
 		CLDevice device = context.getMaxFlopsDevice();
 		
 		// Exercise Sheet 4 - 1.		
@@ -254,24 +254,19 @@ public class testOpenCL {
 		o.AddTwoOpenCLGrid2Ds(grid1, grid2, context, device, size);*/
 		
 		// Exercise Sheet 4 - 3.
-		
-		// for creating a sinogram from class PhantomK
-		//p.setSpacing(0.1, 0.1);
+		// for creating a sinogram from class Phantom
 		p.setOrigin(-(size[0] - 1) * p.getSpacing()[0] / 2, -(size[1] - 1) * p.getSpacing()[1]/ 2);
 		float d = (float) (Math.sqrt(2) * p.getHeight() * p.getSpacing()[0]);		
-		//Grid2D sinogram = p.createSinogram(360, detectorSpacing, (int)((int)d/detectorSpacing), d/2 );
 		myParallelProject projector = new myParallelProject(300,1,400);
  		Grid2D sinogram = projector.projectRayDriven(p);
  		double detectorSpacing = projector.detectorSpacing;
-		//sinogram.setSpacing(360/sinogram.getSize()[0], detectorSpacing);
-		//sinogram.setOrigin(-(sinogram.getSize()[0]-1)*sinogram.getSpacing()[0]/2, -(sinogram.getSize()[1]-1)*sinogram.getSpacing()[1]/2 );
 		double [] pixelSpacingRecon = {p.getSpacing()[0], p.getSpacing()[1]};
 		int numberProj = projector.projectionNumber;
 		int numberDetPixel = projector.detectorPixel;
 
 		OpenCLGrid2D sinogramCL = new OpenCLGrid2D(sinogram, context, device);
 		
-		//ramp filtern
+		//ramp filter
 		CONRAD.setup();
 		RampFilteringTool r = new RampFilteringTool();
 		RampFilter ramp = new RamLakRampFilter();
