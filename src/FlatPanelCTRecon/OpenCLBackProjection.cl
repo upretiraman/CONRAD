@@ -15,10 +15,8 @@ kernel void OpenCLBackProjection(__global float* backProjectionPic, //OpenCL rec
 								int numberDetPixel, //Number of detector pixels
 								int sizeReconPicX, //Size of the reconstructed phantom in x direction
 								int sizeReconPicY, //Size of the reconstructed phantom in y direction
-								double pixelSpacingReconX, //Pixel spacing in the reconstructed phantom in
-								x direction
-								double pixelSpacingReconY, //Pixel spacing in the reconstructed phantom in
-								y direction
+								double pixelSpacingReconX, //Pixel spacing in the reconstructed phantom in x direction
+								double pixelSpacingReconY, //Pixel spacing in the reconstructed phantom in y direction
 								float originX, //Origin for the detector/CT coordinate system in X direction
 								float originY) //Origin for the detector/CT coordinate system in y direction
 {
