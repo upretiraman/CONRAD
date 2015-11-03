@@ -7,7 +7,6 @@ import com.jogamp.opencl.CLBuffer;
 import com.jogamp.opencl.CLCommandQueue;
 import com.jogamp.opencl.CLContext;
 import com.jogamp.opencl.CLDevice;
-import com.jogamp.opencl.CLImage2d;
 import com.jogamp.opencl.CLImageFormat;
 import com.jogamp.opencl.CLKernel;
 import com.jogamp.opencl.CLProgram;
@@ -71,8 +70,6 @@ public class myOpenCL {
 		// creating openCL sinogram
 		OpenCLGrid2D sinogramCL = new OpenCLGrid2D(sinogram, openCLObj.clContext, openCLObj.clDevice);
 		
-		//CONRAD.setup();
-		
 		//Setting up Ramp Filter
 		RampFilteringTool rampFilterTool = new RampFilteringTool();
 		RampFilter rampFilter = new RamLakRampFilter();
@@ -83,7 +80,6 @@ public class myOpenCL {
 		} 
 		catch (Exception e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -144,7 +140,6 @@ public class myOpenCL {
 		try {
 			program = clContext.createProgram(this.getClass().getResourceAsStream("AddOpenCLGrid2D.cl")).build();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
