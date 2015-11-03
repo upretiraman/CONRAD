@@ -259,9 +259,9 @@ public class testOpenCL {
 		float d = (float) (Math.sqrt(2) * p.getHeight() * p.getSpacing()[0]);		
 		myParallelProject projector = new myParallelProject(300,1,400);
 		myParallelBackProjection backProjector = new myParallelBackProjection(300,1,400);
- 		Grid2D sinogram = projector.projectRayDriven(p);
+ 		//Grid2D sinogram = projector.projectRayDriven(p);
  		//Uncomment following code for the filtered sinogram
-		//Grid2D sinogram = backProjector.filterSino(projector.projectRayDriven(p));
+		Grid2D sinogram = backProjector.filterSino(projector.projectRayDriven(p));
  		double detectorSpacing = projector.detectorSpacing;
 		double [] pixelSpacingRecon = {p.getSpacing()[0], p.getSpacing()[1]};
 		int numberProj = projector.projectionNumber;
