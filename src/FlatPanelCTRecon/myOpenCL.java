@@ -32,6 +32,7 @@ public class myOpenCL {
 	public myOpenCL()
 	{
 		clContext = OpenCLUtil.createContext();
+		CLDevice[] devices = clContext.getDevices();
 		clDevice  = clContext.getMaxFlopsDevice();
 	}
 
@@ -327,5 +328,4 @@ public class myOpenCL {
 		return result;
 	}
 
-	
 }
