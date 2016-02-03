@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.Vector;
 import java.beans.ExceptionListener;
 import javax.swing.JOptionPane;
 
@@ -84,6 +85,16 @@ public class Configuration implements SafeSerializable {
 
 	private ImageFilteringTool [] filterPipeline;
 	private BufferedProjectionSink sink;
+	
+	// Entries for Brain Phantom
+	private String brainPhantomDirectory = null;
+	private String frwdProjectionMatrix = null;
+	private String bckProjectionMatrix = null;
+	private String outputDirectory = null;
+	private SimpleVector spectrumBinningkEvVector = null;
+	private Float spectrumPeakkEv = null;
+	private Float spectrumSamplingkEv = null;
+	private Float spectrumTimeCurrentProduct = null;
 
 	// Entries for GUI
 
@@ -338,7 +349,71 @@ public class Configuration implements SafeSerializable {
 	public void setProjectionTableFileName(String projectionTableFileName) {
 		this.projectionTableFileName = projectionTableFileName;
 	}
-
+	public void setBrainPhantomDirectory(String brainPhantomDirectory)
+	{
+		this.brainPhantomDirectory = brainPhantomDirectory;
+	}
+	public String getBrainPhantomDirectory()
+	{
+		return brainPhantomDirectory;
+	}
+	public void setFrwdProjectionMatrix(String frwdProjectionMatrix)
+	{
+		this.frwdProjectionMatrix = frwdProjectionMatrix;
+	}
+	public String getFrwdProjectionMatrix()
+	{
+		return frwdProjectionMatrix;
+	}
+	public void setBckProjectionMatrix(String bckProjectionMatrix)
+	{
+		this.bckProjectionMatrix = bckProjectionMatrix;
+	}
+	public String getBckProjectionMatrix()
+	{
+		return bckProjectionMatrix;
+	}
+	public void setOutputDirectory(String outputDirectory)
+	{
+		this.outputDirectory = outputDirectory;
+	}
+	public String getOutputDirectory()
+	{
+		
+		return outputDirectory;
+	}
+	public void setSpectrumBinningkEvVector(SimpleVector spectrumBinningkEvVector)
+	{
+		this.spectrumBinningkEvVector = spectrumBinningkEvVector;
+	}
+	public SimpleVector getSpectrumBinningkEvVector()
+	{
+		return spectrumBinningkEvVector;
+	}
+	public void setSpectrumPeakkEv(Float spectrumPeakkEv)
+	{
+		this.spectrumPeakkEv = spectrumPeakkEv;
+	}
+	public Float getSpectrumPeakkEv()
+	{
+		return spectrumPeakkEv;
+	}
+	public void setSpectrumSamplingkEv(Float spectrumSamplingkEv)
+	{
+		this.spectrumSamplingkEv = spectrumSamplingkEv;
+	}
+	public Float getSpectrumSamplingkEv()
+	{
+		return spectrumSamplingkEv;
+	}
+	public void setSpectrumTimeCurrentProduct(Float spectrumTimeCurrentProduct)
+	{
+		this.spectrumTimeCurrentProduct = spectrumTimeCurrentProduct;
+	}
+	public Float getSpectrumTimeCurrentProduct()
+	{
+		return spectrumTimeCurrentProduct;
+	}
 	public void setCutOffFrequency(double cutOffFrequency) {
 		this.cutOffFrequency = cutOffFrequency;
 	}

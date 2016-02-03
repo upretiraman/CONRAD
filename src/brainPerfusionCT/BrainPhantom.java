@@ -14,6 +14,7 @@ import edu.stanford.rsl.conrad.utils.StatisticsUtil;
 import edu.stanford.rsl.conrad.data.numeric.Grid2D;
 import edu.stanford.rsl.conrad.geometry.trajectories.ConfigFileBasedTrajectory;
 import edu.stanford.rsl.conrad.geometry.trajectories.Trajectory;
+import edu.stanford.rsl.conrad.numerics.SimpleVector;
 import edu.stanford.rsl.conrad.opencl.OpenCLForwardProjectorDynamicVolume;
 import edu.stanford.rsl.conrad.physics.PolychromaticXRaySpectrum;
 import edu.stanford.rsl.conrad.physics.materials.Material;
@@ -46,13 +47,12 @@ public class BrainPhantom {
 	{
 		Configuration.loadConfiguration();
 		PerfusionBrainPhantomConfig cfg = new PerfusionBrainPhantomConfig();
-		cfg.phantom_directory = "//home//cip//medtech2014//ir31yrit//Documents//phantom//";
+		//cfg.phantom_directory = "//home//cip//medtech2014//ir31yrit//Documents//phantom//";
+		cfg.phantom_directory = Configuration.getGlobalConfiguration().getBrainPhantomDirectory(); //"//home//raman//Documents//brainperfusion//";
 		cfg.phantom_sampling = 1.f;
-		
-		cfg.calibration_fwd_proj_matrices_file = "//home//cip//medtech2014//ir31yrit//Documents//phantom//PMatrix248.txt";
-		cfg.calibration_bwd_proj_matrices_file = "//home//cip//medtech2014//ir31yrit//Documents//phantom//PMatrix248.txt";
-		
-		cfg.projection_output_directory = "//home//cip//medtech2014//ir31yrit//Documents//phantom//classifierTest//";
+		cfg.calibration_fwd_proj_matrices_file = Configuration.getGlobalConfiguration().getFrwdProjectionMatrix();//"//home//raman//Documents//brainperfusion//PMatrix248.txt";
+		cfg.calibration_bwd_proj_matrices_file = Configuration.getGlobalConfiguration().getBckProjectionMatrix();//"//home//raman//Documents//brainperfusion//PMatrix248.txt";
+		cfg.projection_output_directory = Configuration.getGlobalConfiguration().getOutputDirectory();//"//home//raman//Documents//brainperfusion//classifierTest//";
 		
 		cfg.t_start = 0;
 		cfg.t_rot = 0;
@@ -60,11 +60,17 @@ public class BrainPhantom {
 		cfg.n_rot = 1;
 		
 		cfg.spectrum_binning_keV = new Vector<Float>();
-		cfg.spectrum_binning_keV.add(10.f);
-		cfg.spectrum_binning_keV.add(60.f);
-		cfg.spectrum_peak_keV = 60;
-		cfg.spectrum_sampling_keV = 1.f;
-		cfg.spectrum_time_current_product_mAs = 2.5f;
+		//cfg.spectrum_binning_keV.add(10.f); 
+		//cfg.spectrum_binning_keV.add(60.f);
+		double[] doubleArray = Configuration.getGlobalConfiguration().getSpectrumBinningkEvVector().copyAsDoubleArray();
+		for (int i = 0 ; i < doubleArray.length; i++)
+		{
+			cfg.spectrum_binning_keV.add((float) doubleArray[i]);
+		}
+		
+		cfg.spectrum_peak_keV = Configuration.getGlobalConfiguration().getSpectrumPeakkEv();///60;
+		cfg.spectrum_sampling_keV = Configuration.getGlobalConfiguration().getSpectrumSamplingkEv(); //1.f;
+		cfg.spectrum_time_current_product_mAs = Configuration.getGlobalConfiguration().getSpectrumTimeCurrentProduct(); //2.5f;
 		
 		cfg.noise_add = false;
 		
@@ -93,8 +99,11 @@ public class BrainPhantom {
 			initialized = false;
 			return;
 		}
-		io = new BrainPhantomIO(cfg.phantom_directory,cfg.projection_output_directory,g_fwd.getNumProjectionMatrices(),
-				g_fwd.getDetectorWidth(),g_fwd.getDetectorHeight());		
+		io = new BrainPhantomIO(cfg.phantom_directory,
+				cfg.projection_output_directory,
+				g_fwd.getNumProjectionMatrices(),
+				g_fwd.getDetectorWidth(),
+				g_fwd.getDetectorHeight());		
 		
 		try {
 			vol_skull = io.loadVolume("skull");//skull.raw
@@ -119,7 +128,7 @@ public class BrainPhantom {
 		// material decomposed dynamic forward projection 
 		// -----------------------------------------------------
 		
-		//dynamicDensityForwardProjection();
+		dynamicDensityForwardProjection();
 		
 		// -----------------------------------------------------
 		// generation of binned energy selective projection data 
@@ -439,7 +448,6 @@ public class BrainPhantom {
 		return volume;
 	}
 	
-
 	public void createSpectralCalibrationPhantom() throws IOException
 	{
 		int[] volumeSize = new int[3];
@@ -516,6 +524,5 @@ public class BrainPhantom {
 		io.saveProjectionData(projection, "cylinder_projection_ref");
 		io.saveProjectionData(poly_projection, "cylinder_projection");
 	}
-	
 	
 }

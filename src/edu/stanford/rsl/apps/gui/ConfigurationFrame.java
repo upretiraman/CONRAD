@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.ButtonGroup;
@@ -322,6 +323,17 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 		numSweepsField.setText("" + config.getNumSweeps());
 
 		maxVOIPathField.setText(config.getVolumeOfInterestFileName());
+		brainPhantomDirectory.setText(config.getBrainPhantomDirectory());
+		frwdProjectionMatrix.setText(config.getFrwdProjectionMatrix());
+		bckProjectionMatrix.setText(config.getBckProjectionMatrix());
+		outputDirectory.setText(config.getOutputDirectory());
+		SimpleVector specBinkEV = config.getSpectrumBinningkEvVector();
+		if(specBinkEV==null)
+			specBinkEV = new SimpleVector(10,60);
+		spectrumBinningkEv.setText(specBinkEV.toString());
+		spectrumPeakkEv.setText("" + config.getSpectrumPeakkEv());
+		spectrumSamplingkEv.setText("" + config.getSpectrumSamplingkEv());
+		spectrumTimeCurrentProduct.setText("" + config.getSpectrumTimeCurrentProduct());
 		projectionTableFileField.setText(config.getProjectionTableFileName());
 		// other
 		recentFileOneField.setText(config.getRecentFileOne());
@@ -400,6 +412,17 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 		config.getGeometry().setDetectorUDirection(getDirection((String)DetectorUDirection.getSelectedItem()));
 		config.getGeometry().setDetectorVDirection(getDirection((String)DetectorVDirection.getSelectedItem()));
 
+		// Brain Phantom
+		config.setBrainPhantomDirectory(getTextSave(brainPhantomDirectory));
+		config.setFrwdProjectionMatrix(getTextSave(frwdProjectionMatrix));
+		config.setBckProjectionMatrix(getTextSave(bckProjectionMatrix));
+		config.setOutputDirectory(getTextSave(outputDirectory));
+		SimpleVector specBinkEv = new SimpleVector();
+		specBinkEv.setVectorSerialization(spectrumBinningkEv.getText());
+		config.setSpectrumBinningkEvVector(specBinkEv);
+		config.setSpectrumPeakkEv(Float.parseFloat(spectrumPeakkEv.getText()));
+		config.setSpectrumSamplingkEv(Float.parseFloat(spectrumSamplingkEv.getText()));
+		config.setSpectrumTimeCurrentProduct(Float.parseFloat(spectrumTimeCurrentProduct.getText()));
 		regEditor.updateToConfiguration();
 	}
 
@@ -660,6 +683,36 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 		GUIUtil.enableDragAndDrop(recentFileTwoField);
 		return volume;
 	}
+	
+
+	JTextField brainPhantomDirectory = new JTextField();
+	JTextField frwdProjectionMatrix = new JTextField();
+	JTextField bckProjectionMatrix = new JTextField();
+	JTextField outputDirectory = new JTextField();
+	JTextField spectrumBinningkEv = new JTextField();
+	JTextField spectrumPeakkEv = new JTextField();
+	JTextField spectrumSamplingkEv = new JTextField();
+	JTextField spectrumTimeCurrentProduct = new JTextField();
+	
+	private JPanel brainphantomPane()
+	{
+		JPanel volume = new JPanel();
+		volume.setBackground(Color.white);
+		volume.setLayout(createSubPaneLayout());
+		positionLabelTextFieldPair(volume, "Phantom Directory", brainPhantomDirectory, 1, 1, 3,0);
+		positionLabelTextFieldPair(volume, "Forward Projection Matrices", frwdProjectionMatrix, 1, 1, 3,30);
+		positionLabelTextFieldPair(volume, "Backward Projection Matrices", bckProjectionMatrix, 1, 1, 3,60);
+		positionLabelTextFieldPair(volume, "Output Directory", outputDirectory, 1, 1, 3,90);
+		positionNumericLabelTextFieldPair(volume, "Spectrum Binning kEv", spectrumBinningkEv, 1, 1, 120);
+		positionNumericLabelTextFieldPair(volume, "Spectrum Peak kEv", spectrumPeakkEv, 3, 1, 120);
+		positionNumericLabelTextFieldPair(volume, "Spectrum Sampling kEv", spectrumSamplingkEv, 1, 1, 150);
+		positionNumericLabelTextFieldPair(volume, "Spectrum Time Currect Product mAs", spectrumTimeCurrentProduct, 3, 1, 150);
+		GUIUtil.enableDragAndDrop(brainPhantomDirectory);
+		GUIUtil.enableDragAndDrop(frwdProjectionMatrix);
+		GUIUtil.enableDragAndDrop(bckProjectionMatrix);
+		GUIUtil.enableDragAndDrop(outputDirectory);
+		return volume;
+	}
 
 	/**
 	 * Creates GridBagConstraints
@@ -704,6 +757,7 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 			jTabbedPane.add("Trajectory", trajectoryPane());
 			jTabbedPane.add("Other", otherPane());
 			jTabbedPane.add("Registry", regEditor);
+			jTabbedPane.add("BrainPhantom", brainphantomPane());
 			pack();
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -22,7 +22,6 @@ public class BrainPhantomIO{
 	String projection_output_directory;
 	int	   nProjections, detectorWidth, detectorHeight;
 	
-	
 	public BrainPhantomIO(String phantom_directory, String projection_output_directory, int nProjections, int detectorWidth, int detectorHeight)
 	{
 		this.phantom_directory = phantom_directory;
@@ -31,8 +30,6 @@ public class BrainPhantomIO{
 		this.detectorWidth = detectorWidth;
 		this.detectorHeight = detectorHeight;
 	}
-	
-	
 	
 	public float[] loadVolume(String filename) throws IOException
 	{
