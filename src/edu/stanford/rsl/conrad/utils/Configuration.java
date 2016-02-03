@@ -95,6 +95,11 @@ public class Configuration implements SafeSerializable {
 	private Float spectrumPeakkEv = null;
 	private Float spectrumSamplingkEv = null;
 	private Float spectrumTimeCurrentProduct = null;
+	private boolean addNoise = false;
+	private Float t_Start = null;
+	private Float t_Rot = null;
+	private Float t_Stop = null;
+	private Float n_Rot = null;
 
 	// Entries for GUI
 
@@ -413,6 +418,46 @@ public class Configuration implements SafeSerializable {
 	public Float getSpectrumTimeCurrentProduct()
 	{
 		return spectrumTimeCurrentProduct;
+	}
+	public void setAddNoise (boolean addNoise)
+	{
+		this.addNoise = addNoise;
+	}
+	public boolean getAddNoise()
+	{
+		return addNoise;
+	}
+	public void sett_Start (Float t_Start)
+	{
+		this.t_Start = t_Start;
+	}
+	public Float gett_Start()
+	{
+		return t_Start;
+	}
+	public void sett_Rot (Float t_Rot)
+	{
+		this.t_Rot = t_Rot;
+	}
+	public Float gett_Rot()
+	{
+		return t_Rot;
+	}
+	public void sett_Stop (Float t_Stop)
+	{
+		this.t_Stop = t_Stop;
+	}
+	public Float gett_Stop()
+	{
+		return t_Stop;
+	}
+	public void setn_Rot (Float n_Rot)
+	{
+		this.n_Rot = n_Rot;
+	}
+	public Float getn_Rot()
+	{
+		return n_Rot;
 	}
 	public void setCutOffFrequency(double cutOffFrequency) {
 		this.cutOffFrequency = cutOffFrequency;

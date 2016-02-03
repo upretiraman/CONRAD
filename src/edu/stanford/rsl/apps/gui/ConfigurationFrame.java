@@ -334,6 +334,7 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 		spectrumPeakkEv.setText("" + config.getSpectrumPeakkEv());
 		spectrumSamplingkEv.setText("" + config.getSpectrumSamplingkEv());
 		spectrumTimeCurrentProduct.setText("" + config.getSpectrumTimeCurrentProduct());
+		addNoise.setSelected(config.getAddNoise());
 		projectionTableFileField.setText(config.getProjectionTableFileName());
 		// other
 		recentFileOneField.setText(config.getRecentFileOne());
@@ -423,6 +424,7 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 		config.setSpectrumPeakkEv(Float.parseFloat(spectrumPeakkEv.getText()));
 		config.setSpectrumSamplingkEv(Float.parseFloat(spectrumSamplingkEv.getText()));
 		config.setSpectrumTimeCurrentProduct(Float.parseFloat(spectrumTimeCurrentProduct.getText()));
+		config.setAddNoise(addNoise.isSelected());
 		regEditor.updateToConfiguration();
 	}
 
@@ -693,6 +695,11 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 	JTextField spectrumPeakkEv = new JTextField();
 	JTextField spectrumSamplingkEv = new JTextField();
 	JTextField spectrumTimeCurrentProduct = new JTextField();
+	JTextField t_Start = new JTextField();
+	JTextField t_Stop = new JTextField();
+	JTextField t_Rot = new JTextField();
+	JTextField n_Rot = new JTextField();
+	JCheckBox addNoise = new JCheckBox("Add Noise");
 	
 	private JPanel brainphantomPane()
 	{
@@ -706,7 +713,13 @@ public class ConfigurationFrame extends JFrame implements ActionListener {
 		positionNumericLabelTextFieldPair(volume, "Spectrum Binning kEv", spectrumBinningkEv, 1, 1, 120);
 		positionNumericLabelTextFieldPair(volume, "Spectrum Peak kEv", spectrumPeakkEv, 3, 1, 120);
 		positionNumericLabelTextFieldPair(volume, "Spectrum Sampling kEv", spectrumSamplingkEv, 1, 1, 150);
-		positionNumericLabelTextFieldPair(volume, "Spectrum Time Currect Product mAs", spectrumTimeCurrentProduct, 3, 1, 150);
+		positionNumericLabelTextFieldPair(volume, "Spectrum Time Current mAs", spectrumTimeCurrentProduct, 3, 1, 150);
+		positionNumericLabelTextFieldPair(volume, "T_Start", t_Start, 1, 1, 180);
+		positionNumericLabelTextFieldPair(volume, "T_Stop", t_Stop, 3, 1, 180);
+		positionNumericLabelTextFieldPair(volume, "T_Rot", t_Rot, 1, 1, 210);
+		positionNumericLabelTextFieldPair(volume, "N_Rot", n_Rot, 3, 1, 210);
+		volume.add(addNoise, createConstraints(1, 1, 3, 1, GridBagConstraints.NORTH, GridBagConstraints.NONE, 240, 1, 1, 0));
+		addNoise.setBackground(Color.WHITE);
 		GUIUtil.enableDragAndDrop(brainPhantomDirectory);
 		GUIUtil.enableDragAndDrop(frwdProjectionMatrix);
 		GUIUtil.enableDragAndDrop(bckProjectionMatrix);

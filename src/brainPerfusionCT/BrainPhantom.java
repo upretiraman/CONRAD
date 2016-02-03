@@ -72,7 +72,7 @@ public class BrainPhantom {
 		cfg.spectrum_sampling_keV = Configuration.getGlobalConfiguration().getSpectrumSamplingkEv(); //1.f;
 		cfg.spectrum_time_current_product_mAs = Configuration.getGlobalConfiguration().getSpectrumTimeCurrentProduct(); //2.5f;
 		
-		cfg.noise_add = false;
+		cfg.noise_add = Configuration.getGlobalConfiguration().getAddNoise();//false;
 		
 		BrainPhantom pbp = new BrainPhantom(cfg);
 
